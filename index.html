@@ -4,225 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Oracle — Verifiable World Cup Predictions</title>
-  <style>
-    /* ───────────────────────── Windows XP "Luna" theme ───────────────────────── */
-    * { box-sizing:border-box; }
-    html,body { height:100%; }
-    body {
-      margin:0; font:11px "Tahoma","Geneva",sans-serif; color:#000; user-select:none; overflow-x:hidden;
-      background:linear-gradient(to bottom,#2a5bb8 0%,#4b82d6 28%,#82b4e8 48%,#bcd99a 56%,#7db341 68%,#5d9c32 82%,#4e8a2a 100%);
-    }
-
-    /* window chrome */
-    .window { width:min(900px,calc(100% - 24px)); margin:26px auto 80px; background:#ece9d8;
-      border:1px solid #0831d9; border-radius:8px 8px 0 0; box-shadow:0 0 0 1px #001ea0 inset, 3px 3px 10px rgba(0,0,0,.5); padding:3px 4px 4px; }
-    .titlebar { height:30px; display:flex; align-items:center; gap:6px; padding:0 4px 0 8px; border-radius:6px 6px 0 0;
-      background:linear-gradient(to bottom,#0997ff 0%,#0c7bf2 6%,#0a64e6 14%,#0a5ade 45%,#0a55da 86%,#0d6bf0 92%,#0a4ad0 96%,#0834b8 100%); color:#fff; }
-    .titlebar .dot { width:14px; height:14px; border-radius:3px; background:#ffd24a; box-shadow:0 0 0 1px #b8860b inset; }
-    .titlebar .title { flex:1; font:bold 13px "Trebuchet MS",Tahoma,sans-serif; text-shadow:1px 1px 1px rgba(0,0,0,.5);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .ctrls { display:flex; gap:2px; }
-    .ctrl { width:22px; height:21px; border:1px solid #fff; border-radius:3px; color:#fff; font:bold 11px Tahoma; cursor:default;
-      display:grid; place-items:center; box-shadow:0 0 0 1px #06c inset; background:linear-gradient(to bottom,#4a9bff,#0a5ad8 60%,#0a4ec0); }
-    .ctrl.close { background:linear-gradient(to bottom,#f88e6f,#e23a1b 55%,#c52608); }
-    .ctrl:active { filter:brightness(.9); }
-
-    .menubar { display:flex; gap:2px; padding:3px 4px; font-size:11px; }
-    .menubar span { padding:2px 7px; border-radius:3px; cursor:default; }
-    .menubar span:hover { background:#1c63d4; color:#fff; }
-    .client { background:#ece9d8; padding:14px 16px 18px; }
-
-    /* hero */
-    .hero { display:flex; gap:14px; align-items:center; background:linear-gradient(to bottom,#fbfbf8,#ece9d8);
-      border:1px solid #aca899; padding:12px 14px; border-radius:3px; margin-bottom:14px; }
-    .orb { width:54px; height:54px; flex:none; border-radius:8px; display:grid; place-items:center;
-      background:radial-gradient(circle at 35% 30%,#ffe48a,#ffc12e 70%,#e89a00); border:1px solid #b8860b; box-shadow:0 1px 3px rgba(0,0,0,.3); }
-    .orb::after { content:"◆"; color:#7a4d00; font-size:26px; }
-    .hero h1 { margin:0 0 3px; font:bold 18px "Trebuchet MS",Tahoma; color:#0a7a2a; }
-    .hero h1 b { color:#003ce6; }
-    .hero p { margin:0; color:#444; font-size:11px; max-width:640px; }
-
-    /* scoreboard */
-    .scoreboard { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-    .card { background:#fff; border:1px solid #7f9db9; border-radius:2px; padding:14px 10px; text-align:center;
-      box-shadow:1px 1px 0 #fff inset,-1px -1px 0 #d4d0c8 inset; }
-    .card .v { font:bold 26px "Trebuchet MS",Tahoma; color:#0a246a; }
-    .card.acc-card .v { color:#1a7a1a; }
-    .card .l { color:#555; font-size:10px; text-transform:uppercase; letter-spacing:.5px; margin-top:4px; }
-    .acc-ring { display:contents; }
-
-    .calib { margin:12px 0 2px; padding:8px 12px; font-size:11.5px; color:#33414f; border-radius:3px;
-      background:linear-gradient(to bottom,#fffdf3,#f3efd9); border:1px solid #d8cf9f; }
-    .calib:empty { display:none; }
-    .agentline { margin:9px 0 2px; font-size:11px; color:#5a4a1a; padding:6px 9px; border-radius:3px;
-      background:#fff8e6; border:1px solid #e3c277; }
-    .agentline code { color:#7a5200; }
-    .section-title { margin:22px 2px 12px; font-weight:bold; color:#1c5ea8; font-size:11px; letter-spacing:1px; text-transform:uppercase; }
-
-    /* prediction rows */
-    .row { display:flex; align-items:center; gap:12px; padding:10px 12px; margin-bottom:8px;
-      background:#fff; border:1px solid #b4cae0; border-radius:2px; }
-    .row:nth-child(even) { background:#f6f9fd; }
-    .row-id { font-weight:bold; color:#1c5ea8; min-width:26px; font-variant-numeric:tabular-nums; }
-    .row-main { flex:1; min-width:0; }
-    .teams { font-size:13px; margin-bottom:5px; color:#102a54; } .teams .vs { color:#888; font-weight:normal; }
-    .meta { display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:11px; }
-    .pill { padding:1px 8px; border-radius:2px; font-weight:bold; font-size:10px; border:1px solid; }
-    .pill.pred { background:#e8f0ff; color:#0a3ea0; border-color:#9bbcf0; }
-    .pill.panel { background:#fff3d6; color:#9a6a00; border-color:#e3c277; }
-    .status-pending { background:#efece0; color:#6b6655; border:1px solid #c9c4b2; }
-    .status-correct { background:#e3f4df; color:#1a7a1a; border:1px solid #9fd398; }
-    .status-wrong   { background:#fde6e1; color:#c0341d; border:1px solid #f0aa9a; }
-    .muted { color:#6a6a6a; }
-    .empty { color:#555; text-align:center; padding:22px; }
-    .disclaimer { color:#555; font-size:10.5px; line-height:1.6; margin-top:14px; }
-
-    /* Luna buttons */
-    .verify-btn, .g-pick, .send-btn, .ok-btn { font:bold 11px Tahoma; padding:5px 16px; cursor:default; color:#002;
-      border:1px solid #003c74; border-radius:3px; box-shadow:0 0 0 1px #fff inset;
-      background:linear-gradient(to bottom,#fdfeff 0%,#f0f2f6 46%,#e2e6ee 50%,#e9edf4 90%,#fafbfd 100%); }
-    .verify-btn:hover,.g-pick:hover,.send-btn:hover,.ok-btn:hover { border-color:#e08a00; box-shadow:0 0 0 1px #ffe6a0 inset; }
-    .verify-btn:active { background:linear-gradient(to bottom,#e2e6ee,#f0f2f6); }
-
-    /* ── backdrop + floating windows (blur the rest when a card pops) ── */
-    #backdrop { position:fixed; inset:0; z-index:90; background:rgba(20,30,60,.28);
-      backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:opacity .2s; }
-    #backdrop.show { opacity:1; pointer-events:auto; }
-    #card-modal, #game-window, #chat-window { display:none; position:fixed; left:50%; top:50%;
-      transform:translate(-50%,-50%); width:min(560px,calc(100% - 24px)); max-height:88vh; overflow:auto; margin:0; z-index:95; }
-    #card-modal.show, #game-window.show, #chat-window.show { display:block; animation:pop .16s ease-out; }
-    @keyframes pop { from{ transform:translate(-50%,-50%) scale(.96); opacity:.6; } to{ transform:translate(-50%,-50%) scale(1); opacity:1; } }
-    .modal { background:#ece9d8; border:1px solid #0831d9; border-radius:8px 8px 0 0;
-      box-shadow:0 0 0 1px #001ea0 inset, 4px 4px 14px rgba(0,0,0,.5); padding:3px 4px 4px; }
-    .modal .body { background:#ece9d8; padding:14px 16px 18px; }
-
-    /* verification card */
-    .verdict { font:bold 13px Tahoma; letter-spacing:.5px; padding:4px 9px; border-radius:2px; display:inline-block; margin-bottom:10px; }
-    .verdict.ok { background:#def3d8; color:#156b15; border:1px solid #8ccb84; }
-    .verdict.bad { background:#fbe0da; color:#b32a13; border:1px solid #e8a797; }
-    .checking { color:#555; padding:6px 0; }
-    .check { display:flex; align-items:baseline; gap:9px; padding:5px 0; border-top:1px dotted #cfcabb; }
-    .check .tick { font-weight:bold; width:14px; } .check.ok .tick{color:#1a7a1a;} .check.bad .tick{color:#c0341d;}
-    .check .label { font-weight:bold; min-width:185px; color:#102a54; } .check .detail { font-size:11px; }
-    .hashes { margin:3px 0 4px 23px; font-size:11px; } .hashes div{display:flex;gap:8px;} .hashes span{color:#777;width:64px;}
-    code { font-family:"Lucida Console",monospace; font-size:11px; color:#143a8a; }
-    .rationale { margin-top:10px; padding-top:9px; border-top:1px solid #ddd9cc; font-style:italic; color:#333; }
-    .links { margin-top:10px; display:flex; gap:16px; } .links a { color:#0a3ea0; }
-
-    /* debate */
-    .debate { margin-top:14px; padding-top:11px; border-top:1px solid #ddd9cc; }
-    .debate-h { font-weight:bold; color:#9a6a00; margin-bottom:9px; }
-    .dbt { background:#fff; border:1px solid #d8d2bf; border-radius:3px; padding:9px 11px; margin-bottom:7px; }
-    .dbt.judge { background:#fff8e6; border-color:#e3c277; }
-    .dbt-top { display:flex; flex-wrap:wrap; gap:5px 9px; align-items:baseline; }
-    .dbt-call { margin-left:auto; font-weight:bold; color:#0a3ea0; font-size:11px; }
-    .dbt-take { margin-top:5px; font-size:12px; color:#333; font-style:italic; }
-
-    /* game */
-    .g-intro { color:#444; font-size:11px; margin-bottom:12px; }
-    .g-score { display:flex; align-items:center; justify-content:center; gap:20px; padding:12px;
-      background:#fff; border:1px solid #7f9db9; border-radius:2px; box-shadow:1px 1px 0 #d4d0c8 inset; }
-    .g-team { text-align:center; } .g-team b { display:block; font-size:12px; color:#0a3ea0; }
-    .g-team.oracle b { color:#9a6a00; } .g-team span { font:bold 18px "Trebuchet MS",Tahoma; color:#102a54; }
-    .g-vs { color:#888; font-style:italic; }
-    .g-verdict { text-align:center; font-weight:bold; color:#1c5ea8; margin:10px 0 4px; }
-    .g-row { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; margin-bottom:7px;
-      background:#fff; border:1px solid #b4cae0; border-radius:2px; }
-    .g-match { font-size:13px; color:#102a54; } .g-match .muted{font-weight:normal;}
-    .g-picks { display:flex; gap:5px; }
-    .g-pick { padding:5px 12px; }
-    .g-reveal { display:flex; gap:6px; flex-wrap:wrap; }
-    .g-tag { font-size:10px; font-weight:bold; padding:2px 8px; border-radius:2px; border:1px solid; }
-    .g-tag.ok { background:#e3f4df; color:#1a7a1a; border-color:#9fd398; }
-    .g-tag.bad { background:#fde6e1; color:#c0341d; border-color:#f0aa9a; }
-    .g-tag.pend { background:#efece0; color:#6b6655; border-color:#c9c4b2; }
-    .g-tag.actual { background:#e8f0ff; color:#0a3ea0; border-color:#9bbcf0; }
-
-    /* chat */
-    #chat-log { height:300px; overflow-y:auto; padding:4px; display:flex; flex-direction:column; gap:9px;
-      background:#fff; border:1px solid #7f9db9; border-radius:2px; box-shadow:1px 1px 0 #d4d0c8 inset; }
-    .msg { max-width:86%; padding:8px 11px; border-radius:9px; font-size:12px; line-height:1.5; }
-    .msg.user { align-self:flex-end; background:#cfe0ff; border:1px solid #9bbcf0; color:#0a1f4a; }
-    .msg.bot { align-self:flex-start; background:#f3f1ea; border:1px solid #d8d2bf; }
-    .chat-panel { margin-top:7px; padding:7px 9px; background:#fff; border:1px solid #e3ddca; border-radius:4px; font-size:11px; display:flex; flex-direction:column; gap:4px; }
-    .chat-verify { margin-left:6px; padding:3px 9px; font:bold 10px Tahoma; color:#002; border:1px solid #003c74; border-radius:3px;
-      background:linear-gradient(to bottom,#fdfeff,#e2e6ee); cursor:default; }
-    .dots i { display:inline-block; width:6px; height:6px; margin:0 2px; border-radius:50%; background:#888; animation:blink 1.2s infinite; }
-    .dots i:nth-child(2){animation-delay:.2s;} .dots i:nth-child(3){animation-delay:.4s;}
-    @keyframes blink { 0%,60%,100%{opacity:.25;} 30%{opacity:1;} }
-    .chat-input-row { display:flex; gap:7px; margin-top:10px; }
-    #chat-input { flex:1; padding:6px 9px; border:1px solid #7f9db9; border-radius:2px; font:12px Tahoma; box-shadow:1px 1px 0 #d4d0c8 inset; }
-    #chat-input:focus { outline:1px solid #1c63d4; }
-
-    /* desktop icons */
-    .desktop-icon { position:absolute; width:80px; left:14px; text-align:center; cursor:default; padding:5px 3px; border:1px dotted transparent; border-radius:3px; z-index:1; }
-    .desktop-icon .glyph { width:44px; height:44px; margin:0 auto 5px; border-radius:9px; display:grid; place-items:center; font-size:23px;
-      background:radial-gradient(circle at 35% 30%,#ffe48a,#ffc12e 70%,#e89a00); border:1px solid #b8860b; box-shadow:0 1px 3px rgba(0,0,0,.4); color:#7a4d00; }
-    #icon-storage .glyph { background:linear-gradient(#ffe07a,#f4b63a); color:#7a5200; }
-    .desktop-icon span { font-size:11px; color:#fff; text-shadow:1px 1px 1px rgba(0,0,0,.7); }
-    .desktop-icon.sel { border:1px dotted #fff; background:rgba(11,52,164,.45); }
-
-    /* taskbar */
-    .taskbar { position:fixed; left:0; right:0; bottom:0; height:30px; display:flex; align-items:center; z-index:80;
-      background:linear-gradient(to bottom,#2c8af0 0%,#1162da 8%,#2074e6 14%,#1f6fe0 90%,#1860cf 100%); border-top:1px solid #093ea0; }
-    .start { display:flex; align-items:center; gap:6px; height:100%; padding:0 16px 0 9px; cursor:default;
-      font:italic bold 15px "Trebuchet MS",Tahoma; color:#fff; text-shadow:1px 1px 1px rgba(0,0,0,.4); border-radius:0 9px 9px 0;
-      background:linear-gradient(to bottom,#5bbd4a 0%,#3da626 8%,#399f22 40%,#2f8c1c 90%,#2a7d18 100%); box-shadow:2px 0 4px rgba(0,0,0,.3); }
-    .start.active { filter:brightness(.93); }
-    .start .flag { width:15px; height:14px; border-radius:2px;
-      background:linear-gradient(135deg,#f04 0 50%,transparent 50%) 0 0/7.5px 7px no-repeat,
-        linear-gradient(135deg,#4c4 0 50%,transparent 50%) 7.5px 0/7.5px 7px no-repeat,
-        linear-gradient(135deg,#29f 0 50%,transparent 50%) 0 7px/7.5px 7px no-repeat,
-        linear-gradient(135deg,#fc0 0 50%,transparent 50%) 7.5px 7px/7.5px 7px no-repeat; transform:skewX(-8deg); }
-    .tasks { flex:1; display:flex; align-items:center; gap:4px; padding:0 6px; }
-    .taskitem { display:flex; align-items:center; height:22px; padding:0 12px; color:#fff; font-size:11px; border-radius:3px; cursor:default;
-      background:linear-gradient(to bottom,#3f8ef0,#1d62d8); border:1px solid #1955b8; box-shadow:0 0 0 1px rgba(255,255,255,.25) inset; }
-    .tray { padding:0 14px; color:#fff; font-size:11px; font-variant-numeric:tabular-nums;
-      background:linear-gradient(to bottom,#18a5e8,#1278d6); height:22px; display:flex; align-items:center; border-radius:2px; margin-right:2px; box-shadow:1px 0 0 #4cc3ff inset; }
-
-    /* start menu */
-    #startmenu { position:fixed; left:6px; bottom:32px; width:300px; z-index:96; display:none;
-      border:1px solid #0831d9; border-radius:8px 8px 0 0; overflow:hidden; box-shadow:3px 0 12px rgba(0,0,0,.5); }
-    #startmenu.open { display:block; }
-    .sm-head { display:flex; align-items:center; gap:10px; padding:9px 12px; color:#fff;
-      background:linear-gradient(to bottom,#1d68d6,#1c5ed0 50%,#1953c4); border-bottom:2px solid #ff9c00; }
-    .sm-head .av { width:34px; height:34px; border-radius:6px; display:grid; place-items:center; font-size:18px; color:#7a4d00; border:1px solid #fff;
-      background:radial-gradient(circle at 35% 30%,#ffe48a,#ffc12e 70%,#e89a00); }
-    .sm-head b { font:bold 14px "Trebuchet MS",Tahoma; }
-    .sm-list { background:#fff; padding:6px; }
-    .sm-item { display:flex; align-items:center; gap:10px; padding:6px 8px; border-radius:3px; cursor:default; }
-    .sm-item:hover { background:#1c5ed0; color:#fff; } .sm-item:hover small { color:#dfeaff; }
-    .sm-item .i { width:26px; height:26px; border-radius:5px; display:grid; place-items:center; font-size:14px; background:#eef2f8; border:1px solid #c5cfdd; }
-    .sm-item b { font-size:12.5px; } .sm-item small { display:block; color:#555; font-size:11px; }
-    .sm-foot { display:flex; justify-content:flex-end; gap:16px; padding:7px 14px; color:#fff;
-      background:linear-gradient(to bottom,#2f74e0,#1a5ccb); border-top:1px solid #5e92d8; }
-    .sm-foot div { cursor:default; }
-
-    /* boot */
-    #boot { position:fixed; inset:0; z-index:200; background:#000; color:#fff; display:grid; place-items:center; transition:opacity .6s ease; }
-    #boot.hide { opacity:0; pointer-events:none; }
-    .boot-wrap { text-align:center; }
-    .boot-orb { width:60px; height:60px; margin:0 auto 18px; border-radius:10px;
-      background:radial-gradient(circle at 35% 30%,#ffe48a,#ffc12e 70%,#e89a00); box-shadow:0 0 28px rgba(255,200,97,.6); }
-    .boot-logo { font:bold 30px "Trebuchet MS",Tahoma; } .boot-logo b { color:#ffc12e; }
-    .boot-sub { color:#9aa7bd; letter-spacing:3px; font-size:11px; text-transform:uppercase; margin-top:6px; }
-    .boot-track { width:170px; height:14px; margin:26px auto 0; border:1px solid #5a6173; border-radius:3px; padding:2px; overflow:hidden; }
-    .boot-bar { height:100%; width:38%; border-radius:2px; background:linear-gradient(90deg,#2a7be0,#8fd0ff); animation:boot 1.4s linear infinite; }
-    @keyframes boot { 0%{transform:translateX(-120%);} 100%{transform:translateX(320%);} }
-
-    @media (max-width:1200px){ .desktop-icon{display:none;} }
-    @media (max-width:600px){
-      .scoreboard{grid-template-columns:1fr;} #startmenu{width:calc(100% - 20px);}
-      .check .label{min-width:0;} .g-row{flex-direction:column; align-items:stretch;}
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- desktop icons -->
   <div class="desktop-icon" id="icon-verify" style="top:22px;" title="Double-click: verify all"><div class="glyph">◆</div><span>Verify&nbsp;All</span></div>
   <div class="desktop-icon" id="icon-game" style="top:128px;" title="Double-click: play"><div class="glyph">⚽</div><span>Beat&nbsp;the&nbsp;Oracle</span></div>
   <div class="desktop-icon" id="icon-chat" style="top:234px;" title="Double-click: chat"><div class="glyph">💬</div><span>Ask&nbsp;the&nbsp;Oracle</span></div>
-  <div class="desktop-icon" id="icon-storage" style="top:340px;" title="Double-click: explorer"><div class="glyph">🗄</div><span>0G&nbsp;Storage</span></div>
+  <div class="desktop-icon" id="icon-all" style="top:340px;" title="Double-click: all predictions"><div class="glyph">📊</div><span>All&nbsp;Predictions</span></div>
+  <div class="desktop-icon" id="icon-storage" style="top:446px;" title="Double-click: explorer"><div class="glyph">🗄</div><span>0G&nbsp;Storage</span></div>
 
   <!-- main window -->
   <div class="window">
@@ -253,7 +43,12 @@
       <div class="calib" id="calib"></div>
 
       <div class="section-title">Track record · on-chain</div>
+      <div class="tabs">
+        <button class="tab active" data-tab="upcoming">Upcoming</button>
+        <button class="tab" data-tab="verified">Verified</button>
+      </div>
       <div id="list"><p class="empty">Loading from 0G Chain…</p></div>
+      <div id="showmore"></div>
 
       <p class="disclaimer">Integrity is proven by 0G (multi-agent TEE inference + storage + pre-kickoff commit). Quality is proven by this scoreboard over time. Result resolution trusts an off-chain football feed, recorded in every record. Verification runs entirely in your browser.</p>
     </div>
@@ -299,6 +94,7 @@
     <div class="sm-list">
       <div class="sm-item" id="sm-chat"><div class="i">💬</div><div><b>Ask the Oracle</b><small>chat with the agent</small></div></div>
       <div class="sm-item" id="sm-game"><div class="i">⚽</div><div><b>Beat the Oracle</b><small>pick'em vs its record</small></div></div>
+      <div class="sm-item" id="sm-all"><div class="i">📊</div><div><b>All Predictions</b><small>full track record</small></div></div>
       <div class="sm-item" id="sm-verify"><div class="i">◆</div><div><b>Verify All Predictions</b><small>recompute every hash</small></div></div>
       <div class="sm-item" id="sm-storage"><div class="i">🗄</div><div><b>0G Storage Explorer</b><small>browse the records</small></div></div>
       <div class="sm-item" id="sm-about"><div class="i">?</div><div><b>About The Oracle</b><small>how it works</small></div></div>
@@ -365,6 +161,7 @@
     const act=(id,fn)=>document.getElementById(id).addEventListener("click", ()=>{ toggleMenu(false); fn(); });
     act("sm-chat",   ()=>window.OracleChat.open());
     act("sm-game",   ()=>window.OracleGame.open());
+    act("sm-all",    ()=>{ location.href="predictions.html"; });
     act("sm-verify", ()=>verifyAll());
     act("sm-storage",()=>window.open(OC.storageExplorer,"_blank"));
     act("sm-about",  ()=>dialog("About The Oracle", ABOUT));
@@ -387,6 +184,7 @@
     document.getElementById("icon-verify").addEventListener("dblclick", verifyAll);
     document.getElementById("icon-game").addEventListener("dblclick", ()=>window.OracleGame.open());
     document.getElementById("icon-chat").addEventListener("dblclick", ()=>window.OracleChat.open());
+    document.getElementById("icon-all").addEventListener("dblclick", ()=>{ location.href="predictions.html"; });
     document.getElementById("icon-storage").addEventListener("dblclick", ()=>window.open(OC.storageExplorer,"_blank"));
 
     // ── window controls ──

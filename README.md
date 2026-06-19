@@ -1,5 +1,11 @@
 # The Oracle — Verifiable World Cup Predictions on 0G
 
+**▶ Live demo: https://0xzorak.github.io/zero-cup-oracle/** — open it, click **Verify** on any
+prediction, and watch the integrity check run in your own browser (no wallet, no install).
+
+> Redeploy the frontend after edits: `git subtree push --prefix frontend origin gh-pages`
+> (this account uses classic branch-based Pages because GitHub Actions is billing-locked).
+
 An autonomous agent that predicts each World Cup match **before kickoff**, runs the
 reasoning through **0G Compute's TEE-backed inference**, writes the prediction to
 **0G Storage**, and commits its hash on **0G Chain** *before the ball is kicked* — then

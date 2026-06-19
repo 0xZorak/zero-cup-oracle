@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+.DS_Store
+data/cursor.json
+data/agent-id.json
+data/attestations/
+out/
+cache/
+broadcast/

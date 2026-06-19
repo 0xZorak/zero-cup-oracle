@@ -1,0 +1,74 @@
+[
+  {
+    "matchId": "wc2026-m57",
+    "home": "Morocco",
+    "away": "Senegal",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-07-04T19:00:00Z",
+    "context": "Both through to R16. Morocco unbeaten in group, strong press; Senegal physical, missing first-choice LB to suspension."
+  },
+  {
+    "matchId": "wc2026-m58",
+    "home": "Argentina",
+    "away": "Croatia",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-06-22T18:00:00Z",
+    "context": "Holders Argentina rested key players last group game; Croatia's midfield controls tempo but legs are older."
+  },
+  {
+    "matchId": "wc2026-m59",
+    "home": "France",
+    "away": "Japan",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-06-24T20:00:00Z",
+    "context": "France deep squad, scoring freely; Japan high-press, beat one favourite already this tournament."
+  },
+  {
+    "matchId": "wc2026-m60",
+    "home": "Brazil",
+    "away": "Netherlands",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-06-26T18:00:00Z",
+    "context": "Brazil flair vs a disciplined Dutch block; recent meetings tight and often decided late."
+  },
+  {
+    "matchId": "wc2026-m61",
+    "home": "England",
+    "away": "Germany",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-06-28T16:00:00Z",
+    "context": "Classic rivalry. England solid defensively this run; Germany rebuilding but dangerous on transitions."
+  },
+  {
+    "matchId": "wc2026-m62",
+    "home": "Spain",
+    "away": "Portugal",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-06-30T20:00:00Z",
+    "context": "Iberian derby. Spain dominate possession; Portugal carry the bigger individual match-winners."
+  },
+  {
+    "matchId": "wc2026-m63",
+    "home": "Belgium",
+    "away": "USA",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-07-02T23:00:00Z",
+    "context": "Co-host USA riding a loud home crowd; Belgium more talented on paper but ageing and inconsistent."
+  },
+  {
+    "matchId": "wc2026-m64",
+    "home": "Portugal",
+    "away": "Brazil",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-07-05T19:00:00Z",
+    "context": "Heavyweight semi-final. Portugal's veteran core vs Brazil's pace in wide areas; both defences shaky under a high press."
+  },
+  {
+    "matchId": "wc2026-m65",
+    "home": "Netherlands",
+    "away": "Croatia",
+    "competition": "FIFA World Cup 2026",
+    "kickoffUtc": "2026-07-06T19:00:00Z",
+    "context": "Semi-final. Dutch youth and width against Croatia's veteran midfield control; Croatia rarely lose these tight knockout games."
+  }
+]

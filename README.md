@@ -1,10 +1,12 @@
 # The Oracle — Verifiable World Cup Predictions on 0G
 
-**▶ Live demo: https://0xzorak.github.io/zero-cup-oracle/** — open it, click **Verify** on any
+**▶ Live demo: https://frontend-five-kappa-63.vercel.app/** — open it, click **Verify** on any
 prediction, and watch the integrity check run in your own browser (no wallet, no install).
+(Mirror: https://0xzorak.github.io/zero-cup-oracle/)
 
-> Redeploy the frontend after edits: `git subtree push --prefix frontend origin gh-pages`
-> (this account uses classic branch-based Pages because GitHub Actions is billing-locked).
+> Redeploy the frontend after edits:
+> - **Vercel (primary):** `cd frontend && vercel deploy --prod --yes`
+> - **GitHub Pages (mirror):** `git subtree push --prefix frontend origin gh-pages`
 
 An autonomous agent that predicts each World Cup match **before kickoff**, runs the
 reasoning through **0G Compute's TEE-backed inference**, writes the prediction to

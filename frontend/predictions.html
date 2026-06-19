@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All Predictions — The Oracle</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .backlink { color:#fff; text-decoration:none; font-weight:bold; }
+    .menubar .backlink { color:#0a3ea0; }
+    .pagehead { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .pagehead h1 { margin:0; font:bold 17px "Trebuchet MS",Tahoma; color:#0a3ea0; }
+    .pagehead .sub { color:#555; font-size:11px; }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">
+      <div class="dot"></div>
+      <div class="title">All Predictions — The Oracle</div>
+      <div class="ctrls"><div class="ctrl">_</div><div class="ctrl">▢</div>
+        <a class="ctrl close backlink" href="index.html" title="Back to desktop">✕</a></div>
+    </div>
+    <div class="menubar">
+      <a class="backlink" href="index.html">← Back to The Oracle</a>
+    </div>
+    <div class="client">
+      <div class="pagehead">
+        <div>
+          <h1>📊 The full track record</h1>
+          <div class="sub">Every call the Oracle has committed on-chain. Click any to verify it in your browser.</div>
+        </div>
+      </div>
+
+      <div class="scoreboard">
+        <div class="card"><div class="v" id="stat-total">…</div><div class="l">Predictions</div></div>
+        <div class="card"><div class="v" id="stat-resolved">…</div><div class="l">Correct / Resolved</div></div>
+        <div class="card acc-card"><div class="acc-ring" id="acc-ring"><div class="v" id="stat-accuracy">…</div></div><div class="l">Accuracy</div></div>
+      </div>
+
+      <div class="calib" id="calib"></div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="upcoming">Upcoming</button>
+        <button class="tab" data-tab="verified">Verified</button>
+      </div>
+      <div id="list"><p class="empty">Loading from 0G Chain…</p></div>
+    </div>
+  </div>
+
+  <!-- shared backdrop + verification modal -->
+  <div id="backdrop"></div>
+  <div class="modal" id="card-modal">
+    <div class="titlebar"><div class="dot"></div><div class="title" id="card-title">Verification</div>
+      <div class="ctrls"><div class="ctrl close" id="card-x">✕</div></div></div>
+    <div class="body" id="card-body"></div>
+  </div>
+
+  <!-- taskbar -->
+  <div class="taskbar">
+    <a class="start" href="index.html" style="text-decoration:none"><span class="flag"></span>start</a>
+    <div class="tasks"><div class="taskitem">📊 All Predictions</div></div>
+    <div class="tray" id="clock">●</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script>
+  <script src="config.js"></script>
+  <script>
+    // Full mode: show every prediction (no 5-cap, no "show more").
+    window.ORACLE_FULL = true;
+
+    // Shared modal manager (same contract app.js expects on the landing page).
+    const backdrop = document.getElementById("backdrop");
+    const openWins = new Set();
+    window.UI = {
+      openWindow(el){ openWins.add(el); el.classList.add("show"); backdrop.classList.add("show"); },
+      closeWindow(el){ el.classList.remove("show"); openWins.delete(el); if(!openWins.size) backdrop.classList.remove("show"); },
+      closeAll(){ openWins.forEach(e=>e.classList.remove("show")); openWins.clear(); backdrop.classList.remove("show"); },
+      card(title, html){ document.getElementById("card-title").textContent=title;
+        document.getElementById("card-body").innerHTML=html; this.openWindow(document.getElementById("card-modal")); },
+    };
+    backdrop.addEventListener("click", ()=>window.UI.closeAll());
+    document.addEventListener("keydown", e=>{ if(e.key==="Escape") window.UI.closeAll(); });
+    document.getElementById("card-x").onclick = ()=>window.UI.closeWindow(document.getElementById("card-modal"));
+
+    // clock
+    const tick=()=>document.getElementById("clock").textContent=new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+    tick(); setInterval(tick,1000);
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

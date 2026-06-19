@@ -34,8 +34,19 @@ const fmtTs = (s) => new Date(s * 1000).toISOString().replace("T", " ").slice(0,
 const short = (h) => h.slice(0, 10) + "…" + h.slice(-6);
 const ZERO = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
+// Landing page caps each tab at 5 and links to predictions.html for the rest.
+// predictions.html sets window.ORACLE_FULL = true to show everything.
+const FULL_PAGE = !!window.ORACLE_FULL;
+const PAGE_LIMIT = 5;
+const $ = (id) => document.getElementById(id);
+const setText = (id, v) => { const e = $(id); if (e) e.textContent = v; };
+
 // Shared state (also read by the chat agent).
-const State = { predictions: [], total: -1 };
+const State = {
+  predictions: [],
+  total: -1,
+  tab: location.hash === "#verified" ? "verified" : "upcoming",
+};
 window.OracleData = State;
 
 // ── data loading (reentrancy-guarded + render-on-change ⇒ no duplication) ───────
@@ -49,11 +60,10 @@ async function loadScoreboard() {
     oracle.accuracyBps(),
   ]);
   const acc = Number(bps) / 100;
-  document.getElementById("stat-total").textContent = total.toString();
-  document.getElementById("stat-resolved").textContent = `${correct} / ${resolved}`;
-  document.getElementById("stat-accuracy").textContent =
-    Number(resolved) === 0 ? "—" : acc.toFixed(0) + "%";
-  const ring = document.getElementById("acc-ring");
+  setText("stat-total", total.toString());
+  setText("stat-resolved", `${correct} / ${resolved}`);
+  setText("stat-accuracy", Number(resolved) === 0 ? "—" : acc.toFixed(0) + "%");
+  const ring = $("acc-ring");
   if (ring) ring.style.setProperty("--p", `${Number(resolved) === 0 ? 0 : acc}`);
   return Number(total);
 }
@@ -103,17 +113,59 @@ async function main() {
   }
 }
 
+// ── tabs: "upcoming" (Pending) vs "verified" (resolved) ──────────────────────────
+const inTab = (p, tab) => (tab === "verified" ? p.status !== "Pending" : p.status === "Pending");
+
+function setTab(tab) {
+  State.tab = tab;
+  if (!FULL_PAGE && location.hash) history.replaceState(null, "", location.pathname);
+  renderList();
+}
+function wireTabs() {
+  document.querySelectorAll(".tab").forEach((b) =>
+    b.addEventListener("click", () => setTab(b.dataset.tab)),
+  );
+}
+
 // ── rendering ───────────────────────────────────────────────────────────────────
 function renderList() {
-  const list = document.getElementById("list");
-  if (State.predictions.length === 0) {
-    list.innerHTML = `<p class="empty">No predictions committed yet. The Oracle is warming up.</p>`;
-    return;
-  }
-  list.innerHTML = State.predictions.map(rowHTML).join("");
-  State.predictions.forEach((p) => {
-    document.getElementById(`btn-${p.id}`)?.addEventListener("click", () => verify(p.id));
+  const list = $("list");
+  if (!list) return;
+
+  // tab chips: active state + live counts
+  const counts = {
+    upcoming: State.predictions.filter((p) => inTab(p, "upcoming")).length,
+    verified: State.predictions.filter((p) => inTab(p, "verified")).length,
+  };
+  document.querySelectorAll(".tab").forEach((b) => {
+    b.classList.toggle("active", b.dataset.tab === State.tab);
+    const label = b.dataset.tab === "verified" ? "Verified" : "Upcoming";
+    b.textContent = `${label} (${counts[b.dataset.tab]})`;
   });
+
+  const set = State.predictions.filter((p) => inTab(p, State.tab));
+  const shown = FULL_PAGE ? set : set.slice(0, PAGE_LIMIT);
+
+  if (set.length === 0) {
+    list.innerHTML = `<p class="empty">${
+      State.tab === "verified"
+        ? "No resolved predictions yet — check back after kickoff."
+        : "No upcoming predictions right now. The Oracle is between matches."
+    }</p>`;
+  } else {
+    list.innerHTML = shown.map(rowHTML).join("");
+    shown.forEach((p) => $(`btn-${p.id}`)?.addEventListener("click", () => verify(p.id)));
+  }
+
+  // "Show more" → the dedicated full page (landing only)
+  const more = $("showmore");
+  if (more) {
+    const extra = set.length - shown.length;
+    more.innerHTML =
+      !FULL_PAGE && extra > 0
+        ? `<a class="showmore-btn" href="predictions.html#${State.tab}">Show all ${set.length} ${State.tab} →</a>`
+        : "";
+  }
   renderCalibration();
 }
 
@@ -243,5 +295,6 @@ function check(label, ok, detail) {
 }
 
 window.OracleVerify = verify;
+wireTabs();
 main();
 setInterval(main, 30000);

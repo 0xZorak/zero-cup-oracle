@@ -1,7 +1,9 @@
 # The Oracle — Verifiable World Cup Predictions on 0G
 
-**▶ Live demo: https://frontend-five-kappa-63.vercel.app/** — open it, click **Verify** on any
-prediction, and watch the integrity check run in your own browser (no wallet, no install).
+**▶ Live demo: https://zero-cup-oracle-zoraks-projects.vercel.app** — open it, click **Verify**
+on any prediction, and watch the integrity check run in your own browser (no wallet, no install).
+The landing shows the 5 latest calls in **Upcoming / Verified** tabs; **All Predictions**
+(desktop icon / `predictions.html`) has the full record.
 (Mirror: https://0xzorak.github.io/zero-cup-oracle/)
 
 > Redeploy the frontend after edits:

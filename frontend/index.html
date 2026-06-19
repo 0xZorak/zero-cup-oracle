@@ -6,7 +6,7 @@
   <title>The Oracle — Verifiable World Cup Predictions</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="landing">
   <!-- desktop icons -->
   <div class="desktop-icon" id="icon-verify" style="top:22px;" title="Double-click: verify all"><div class="glyph">◆</div><span>Verify&nbsp;All</span></div>
   <div class="desktop-icon" id="icon-game" style="top:128px;" title="Double-click: play"><div class="glyph">⚽</div><span>Beat&nbsp;the&nbsp;Oracle</span></div>
@@ -21,7 +21,7 @@
       <div class="title">The Oracle — Verifiable World Cup Predictions</div>
       <div class="ctrls"><div class="ctrl">_</div><div class="ctrl">▢</div><div class="ctrl close">✕</div></div>
     </div>
-    <div class="menubar"><span>File</span><span>View</span><span>Match</span><span id="menu-verify">Verify</span><span id="menu-chat">Ask</span><span id="menu-help">Help</span></div>
+    <div class="menubar"><span id="menu-file">File</span><span id="menu-view">View</span><span id="menu-match">Match</span><span id="menu-verify">Verify</span><span id="menu-chat">Ask</span><span id="menu-help">Help</span></div>
     <div class="client">
       <div class="hero">
         <div class="orb"></div>
@@ -170,10 +170,24 @@
       '<div id="boot"><div class="boot-wrap"><div class="boot-orb"></div><div class="boot-logo">The <b>Oracle</b></div><div class="boot-sub">restarting…</div><div class="boot-track"><div class="boot-bar"></div></div></div></div>');
       setTimeout(()=>location.reload(),1500); });
 
-    // menu-bar
+    // menu-bar — every item does something
+    document.getElementById("menu-file").onclick=()=>dialog("The Oracle", ABOUT);
+    document.getElementById("menu-view").onclick=()=>{ location.href="predictions.html"; };
+    document.getElementById("menu-match").onclick=()=>window.OracleGame.open();
     document.getElementById("menu-verify").onclick=verifyAll;
     document.getElementById("menu-chat").onclick=()=>window.OracleChat.open();
     document.getElementById("menu-help").onclick=()=>dialog("How it works", HOW);
+
+    // ── window controls (minimize / maximize / close) ──
+    const mainWin = document.querySelector("body > .window");
+    const taskItem = document.querySelector(".taskbar .taskitem");
+    const [btnMin, btnMax, btnClose] = mainWin.querySelectorAll(".titlebar .ctrl");
+    const restore = ()=>{ mainWin.classList.remove("minimized"); taskItem.classList.remove("inactive"); };
+    btnMin.onclick   = ()=>{ mainWin.classList.add("minimized"); taskItem.classList.add("inactive"); };
+    btnClose.onclick = ()=>{ mainWin.classList.add("minimized"); taskItem.classList.add("inactive"); };
+    btnMax.onclick   = ()=> mainWin.classList.toggle("maximized");
+    taskItem.style.cursor = "default";
+    taskItem.onclick = restore;
 
     // ── desktop icons ──
     document.querySelectorAll(".desktop-icon").forEach(ic=>{

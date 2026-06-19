@@ -216,6 +216,29 @@
     .boot-bar { height:100%; width:38%; border-radius:2px; background:linear-gradient(90deg,#2a7be0,#8fd0ff); animation:boot 1.4s linear infinite; }
     @keyframes boot { 0%{transform:translateX(-120%);} 100%{transform:translateX(320%);} }
 
+    /* window controls state */
+    .window.minimized { display:none; }
+    .window.maximized { width:100%; max-width:none; margin:0; border-radius:0; }
+    .taskitem.inactive { background:linear-gradient(to bottom,#2a6fd0,#13509f); box-shadow:none; opacity:.85; }
+
+    /* ── landing fits the viewport: no page scroll ── */
+    body.landing { height:100vh; overflow:hidden; }
+    body.landing .window { margin:10px auto 40px; max-height:calc(100vh - 52px); display:flex; flex-direction:column; }
+    body.landing .window.minimized { display:none; }
+    body.landing .window.maximized { margin:0 0 30px; max-height:calc(100vh - 30px); }
+    body.landing .client { flex:1; min-height:0; display:flex; flex-direction:column; padding:10px 14px 12px; }
+    body.landing .hero { padding:8px 12px; margin-bottom:9px; }
+    body.landing .orb { width:42px; height:42px; } body.landing .orb::after { font-size:20px; }
+    body.landing .hero h1 { font-size:15px; } body.landing .hero p { font-size:10.5px; }
+    body.landing .scoreboard { gap:9px; } body.landing .card { padding:8px; }
+    body.landing .card .v { font-size:21px; } body.landing .card .l { font-size:9px; margin-top:2px; }
+    body.landing .calib { margin:9px 0 2px; padding:6px 10px; }
+    body.landing .section-title { margin:12px 2px 8px; }
+    body.landing #list { flex:1; min-height:0; overflow-y:auto; }
+    body.landing .row { padding:7px 11px; margin-bottom:6px; }
+    body.landing #showmore { margin-top:9px; }
+    body.landing .disclaimer { margin-top:9px; font-size:10px; }
+
     @media (max-width:1200px){ .desktop-icon{display:none;} }
     @media (max-width:600px){
       .scoreboard{grid-template-columns:1fr;} #startmenu{width:calc(100% - 20px);}

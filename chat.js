@@ -47,7 +47,8 @@
       for (const a of d.panel) {
         html += `<div>• <b>${a.agent}</b>: ${a.outcome} ${a.scoreline} <span class="muted">— ${a.take}</span></div>`;
       }
-      html += `<div>• <b>◆ As judge</b>: <span class="muted">${d.consensus}</span></div></div>`;
+      const consensus = window.OracleFmt ? window.OracleFmt.displayConsensus(r) : d.consensus;
+      html += `<div>• <b>◆ As judge</b>: <span class="muted">${consensus}</span></div></div>`;
     }
     const verdict =
       p.status === "Pending" ? `It's committed and awaiting kickoff/result.`

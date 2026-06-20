@@ -3,6 +3,7 @@ import { Wallet } from "ethers";
 import type { ZGComputeNetworkBroker } from "@0glabs/0g-serving-broker";
 import { uploadRecord } from "../broker/storage.js";
 import { commitPrediction, alreadyCommitted } from "../broker/contract.js";
+import { mintPredictionINFT, inftConfigured } from "../broker/inft.js";
 import { recordHash } from "../canonical.js";
 import { cursor } from "./cursor.js";
 import { matchIdToNum, type Fixture } from "./predict.js";
@@ -113,6 +114,17 @@ export async function predictMatch(
     `✅ ${f.home} v ${f.away}: ${parsed.outcome} (${parsed.scoreline}) ` +
       `tee=${inf.teeSignatureValid} id=${id} root=${up.rootHash.slice(0, 12)}… commit=${txHash.slice(0, 12)}…`,
   );
+
+  // 4.5 Mint the soulbound iNFT binding this call to the Agentic ID + 0G record
+  //      (non-fatal — the prediction is already committed; this is provenance).
+  if (inftConfigured() && id >= 0) {
+    try {
+      const minted = await mintPredictionINFT(wallet, id, hash, up.rootHash);
+      if (minted) console.log(`  🪙 iNFT #${minted.tokenId} minted (tx ${minted.txHash.slice(0, 12)}…)`);
+    } catch (e) {
+      console.warn(`  ⚠ iNFT mint failed (non-fatal): ${(e as Error).message}`);
+    }
+  }
 
   // 5. Stake the reputation in public — pre-kickoff post (non-fatal).
   try {

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "the-oracle": {
+      "command": "npx",
+      "args": ["tsx", "mcp/server.ts"],
+      "env": {}
+    }
+  }
+}

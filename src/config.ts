@@ -17,6 +17,7 @@ export const config = {
   rpcUrl: optional("OG_RPC_URL", "https://evmrpc-testnet.0g.ai"),
   chainId: Number(optional("OG_CHAIN_ID", "16602")),
   oracleContract: optional("ORACLE_CONTRACT_ADDRESS"),
+  inftContract: optional("INFT_CONTRACT_ADDRESS"),
   computeProvider: optional("COMPUTE_PROVIDER_ADDRESS"),
   ledgerMinBalance: Number(optional("LEDGER_MIN_BALANCE", "1")),
   ledgerTopupAmount: Number(optional("LEDGER_TOPUP_AMOUNT", "1")),

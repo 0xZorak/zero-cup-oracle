@@ -1,0 +1,10 @@
+node_modules
+.git
+frontend
+contracts
+mcp
+data/cursor.json
+data/agent-id.json
+data/attestations
+.env
+*.md

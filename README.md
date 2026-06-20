@@ -157,6 +157,10 @@ demo the whole loop offline. **Social:** set the four `X_*` OAuth 1.0a creds to 
 pre-kickoff call and post-match receipt to X; leave them blank and the agent dry-runs (prints
 the tweet, never breaks the loop).
 
+> **Running it 24/7?** See [**RUNNING.md**](RUNNING.md) — the free data key, a one-command
+> launch (`npm run agent`), and always-on hosting via pm2 / the included `Dockerfile` /
+> `Procfile` (Railway · Render · Fly).
+
 To ship the site: deploy the static `frontend/` folder to Vercel / Netlify / Cloudflare Pages
 and point `frontend/config.js` at your deployed contract addresses. That URL is all a visitor
 ever needs.

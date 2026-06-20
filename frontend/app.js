@@ -276,6 +276,22 @@ async function verify(id) {
   }
 }
 
+// The judge model occasionally wrote its synthesis in mixed-language (CJK) on a
+// couple of early predictions. Those records are immutable on-chain, so we can't
+// rewrite them — but the *verdict* (outcome + scoreline) is structured data we
+// already have. When the stored synthesis isn't English, show the true on-chain
+// verdict instead. This is display-only: Verify still hashes the raw record bytes
+// fetched from 0G Storage, so integrity is unaffected.
+const HAS_CJK = /[㐀-鿿぀-ヿ가-힯]/;
+function displayConsensus(record) {
+  const c = record?.debate?.consensus || "";
+  if (!HAS_CJK.test(c)) return c;
+  const p = record.prediction;
+  return `Final verdict: ${p.outcome} ${p.scoreline} at ${Math.round(p.confidence * 100)}% confidence. ` +
+    `<span class="muted">(judge synthesis was non-English; showing the on-chain verdict)</span>`;
+}
+window.OracleFmt = { displayConsensus };
+
 function debateHTML(record) {
   const d = record.debate;
   if (!d?.panel?.length) return "";
@@ -294,7 +310,7 @@ function debateHTML(record) {
     ${rows}
     <div class="dbt judge">
       <div class="dbt-top"><b>◆ The Oracle</b> <span class="muted">judge · final verdict</span></div>
-      <div class="dbt-take">“${d.consensus}”</div>
+      <div class="dbt-take">“${displayConsensus(record)}”</div>
     </div>
   </div>`;
 }

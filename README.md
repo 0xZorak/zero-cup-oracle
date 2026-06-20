@@ -242,6 +242,13 @@ mcp/
 
 ---
 
+## Building on 0G — the honest field report
+
+Shipping this end-to-end on 0G surfaced real friction (an out-of-date Storage SDK, a thin
+testnet compute layer, gas/chain-id quirks). Rather than hide it, [**HACKING.md**](HACKING.md)
+documents every gotcha as *symptom → cause → fix*, with the fix linked in this repo — and a
+fair accounting of what 0G genuinely got right. If you're building on 0G, start there.
+
 ## Known caveat — 0G Storage SDK is behind the deployed contract
 
 The published `@0glabs/0g-ts-sdk` (0.3.3, latest) calls the old `submit(Submission)`

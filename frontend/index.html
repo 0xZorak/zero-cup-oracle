@@ -28,7 +28,11 @@
         <div class="orb"></div>
         <div>
           <h1>It calls every match <b>before kickoff.</b></h1>
-          <p>A panel of AI agents reasons inside a TEE, stores the verdict on 0G, and commits it on-chain before the ball is kicked. Don't trust us — click <b>Verify</b>.</p>
+          <p>A panel of AI agents reasons inside a TEE, stores the verdict on 0G, and commits it on-chain before the ball is kicked. <b>Don't trust us — verify it yourself.</b></p>
+          <div class="hero-cta">
+            <button id="hero-verify" class="cta-btn">🔓 Verify the latest call →</button>
+            <span class="cta-note">every number on this page is provable on-chain</span>
+          </div>
         </div>
       </div>
 
@@ -176,6 +180,7 @@
     document.getElementById("menu-view").onclick=()=>{ location.href="predictions.html"; };
     document.getElementById("menu-match").onclick=()=>window.OracleGame.open();
     document.getElementById("menu-verify").onclick=verifyAll;
+    document.getElementById("hero-verify")?.addEventListener("click", verifyAll);
     document.getElementById("menu-chat").onclick=()=>window.OracleChat.open();
     document.getElementById("menu-help").onclick=()=>dialog("How it works", HOW);
 

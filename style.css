@@ -36,6 +36,13 @@
     .hero h1 { margin:0 0 3px; font:bold 18px "Trebuchet MS",Tahoma; color:#0a7a2a; }
     .hero h1 b { color:#003ce6; }
     .hero p { margin:0; color:#444; font-size:11px; max-width:640px; }
+    .hero-cta { display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap; }
+    .cta-btn { font:bold 11px Tahoma; padding:5px 14px; cursor:pointer; color:#fff;
+      background:linear-gradient(to bottom,#4aa3ff,#1565d8 55%,#0b4fb8); border:1px solid #0a3ea0;
+      border-radius:3px; box-shadow:0 1px 0 #fff inset; }
+    .cta-btn:hover { filter:brightness(1.06); box-shadow:0 0 0 1px #ffe6a0 inset; }
+    .cta-btn:active { filter:brightness(.94); }
+    .cta-note { font-size:10px; color:#6a6a6a; font-style:italic; }
 
     /* scoreboard */
     .scoreboard { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }

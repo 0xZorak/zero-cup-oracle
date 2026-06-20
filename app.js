@@ -15,8 +15,12 @@ const ABI = [
   "function accuracyBps() view returns (uint256)",
 ];
 
+const INFT_ABI = ["function tokenOfPrediction(uint256) view returns (uint256)"];
+
 const provider = new ethers.JsonRpcProvider(CFG.rpc, CFG.chainId);
 const oracle = new ethers.Contract(CFG.contract, ABI, provider);
+// Soulbound Prediction iNFT (optional — only if configured).
+const inft = CFG.inft ? new ethers.Contract(CFG.inft, INFT_ABI, provider) : null;
 
 // ── canonical JSON — MUST byte-match the agent's src/canonical.ts ──────────────
 function sortDeep(v) {
@@ -80,14 +84,26 @@ async function fetchPrediction(id) {
     actual: OUTCOME[Number(p.actual)],
     status: STATUS[Number(p.status)],
     record: null,
+    inftTokenId: null,
   };
+  const tasks = [];
   if (p.storageRoot && p.storageRoot !== ZERO) {
-    try {
-      base.record = await (await fetch(CFG.storageGateway + p.storageRoot)).json();
-    } catch {
-      /* gateway hiccup — keep on-chain data only */
-    }
+    tasks.push(
+      fetch(CFG.storageGateway + p.storageRoot)
+        .then((r) => r.json())
+        .then((j) => { base.record = j; })
+        .catch(() => { /* gateway hiccup — keep on-chain data only */ }),
+    );
   }
+  if (inft) {
+    tasks.push(
+      inft
+        .tokenOfPrediction(id)
+        .then((t) => { const n = Number(t); if (n > 0) base.inftTokenId = n - 1; })
+        .catch(() => { /* iNFT not minted / contract unavailable */ }),
+    );
+  }
+  await Promise.all(tasks);
   return base;
 }
 
@@ -196,6 +212,10 @@ function rowHTML(p) {
   const panel = p.record?.debate?.panel?.length
     ? `<span class="pill panel">⚖ ${p.record.debate.panel.length}-agent debate</span>`
     : "";
+  const inftPill =
+    p.inftTokenId != null
+      ? `<a class="pill inft" href="${CFG.explorerAddr}${CFG.inft}" target="_blank" rel="noopener" title="Soulbound iNFT bound to the agent's 0G Agentic ID">🪙 iNFT #${p.inftTokenId}</a>`
+      : "";
   return `
     <div class="row">
       <div class="row-id">#${p.id}</div>
@@ -205,6 +225,7 @@ function rowHTML(p) {
           <span class="pill pred">CALL · ${p.predicted}</span>
           <span class="pill status-${p.status.toLowerCase()}">${p.status}</span>
           ${panel}
+          ${inftPill}
           <span class="muted">kickoff ${fmtTs(p.kickoff)}</span>
         </div>
       </div>
@@ -241,6 +262,7 @@ async function verify(id) {
       ${check("Committed before kickoff", preKickoff, `${fmtTs(p.committedAt)} &lt; ${fmtTs(p.kickoff)}`)}
       ${check("Produced inside a TEE", tee, `${record.provenance.model}`)}
       ${agentLine(record)}
+      ${inftLine(p)}
       ${debateHTML(record)}
       <div class="rationale">“${record.prediction.rationale}”
         <span class="muted">— ${(record.prediction.confidence * 100).toFixed(0)}% confidence, called ${record.prediction.scoreline}</span></div>
@@ -284,6 +306,11 @@ function agentLine(record) {
     ? ` · <a href="${CFG.storageGateway}${record.agentCardRoot}" target="_blank" rel="noopener">identity card ↗</a>`
     : "";
   return `<div class="agentline">🪪 Signed by agent <code>${did}</code> (0G Agentic ID)${card}</div>`;
+}
+
+function inftLine(p) {
+  if (p.inftTokenId == null) return "";
+  return `<div class="agentline">🪙 Minted as soulbound iNFT <code>#${p.inftTokenId}</code> on 0G Chain, bound to the Agentic ID · <a href="${CFG.explorerAddr}${CFG.inft}" target="_blank" rel="noopener">contract ↗</a></div>`;
 }
 
 function check(label, ok, detail) {

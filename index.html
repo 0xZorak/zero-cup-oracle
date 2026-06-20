@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Oracle — Verifiable World Cup Predictions</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="landing">
@@ -19,7 +20,7 @@
     <div class="titlebar">
       <div class="dot"></div>
       <div class="title">The Oracle — Verifiable World Cup Predictions</div>
-      <div class="ctrls"><div class="ctrl">_</div><div class="ctrl">▢</div><div class="ctrl close">✕</div></div>
+      <div class="ctrls"><div class="ctrl">_</div><div class="ctrl disabled" title="Maximize unavailable">▢</div><div class="ctrl close">✕</div></div>
     </div>
     <div class="menubar"><span id="menu-file">File</span><span id="menu-view">View</span><span id="menu-match">Match</span><span id="menu-verify">Verify</span><span id="menu-chat">Ask</span><span id="menu-help">Help</span></div>
     <div class="client">
@@ -181,11 +182,10 @@
     // ── window controls (minimize / maximize / close) ──
     const mainWin = document.querySelector("body > .window");
     const taskItem = document.querySelector(".taskbar .taskitem");
-    const [btnMin, btnMax, btnClose] = mainWin.querySelectorAll(".titlebar .ctrl");
+    const [btnMin, , btnClose] = mainWin.querySelectorAll(".titlebar .ctrl");
     const restore = ()=>{ mainWin.classList.remove("minimized"); taskItem.classList.remove("inactive"); };
     btnMin.onclick   = ()=>{ mainWin.classList.add("minimized"); taskItem.classList.add("inactive"); };
     btnClose.onclick = ()=>{ mainWin.classList.add("minimized"); taskItem.classList.add("inactive"); };
-    btnMax.onclick   = ()=> mainWin.classList.toggle("maximized");
     taskItem.style.cursor = "default";
     taskItem.onclick = restore;
 

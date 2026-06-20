@@ -14,11 +14,13 @@
     .titlebar .dot { width:14px; height:14px; border-radius:3px; background:#ffd24a; box-shadow:0 0 0 1px #b8860b inset; }
     .titlebar .title { flex:1; font:bold 13px "Trebuchet MS",Tahoma,sans-serif; text-shadow:1px 1px 1px rgba(0,0,0,.5);
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .ctrls { display:flex; gap:2px; }
+    .ctrls { display:flex; gap:2px; flex-shrink:0; }
     .ctrl { width:22px; height:21px; border:1px solid #fff; border-radius:3px; color:#fff; font:bold 11px Tahoma; cursor:default;
       display:grid; place-items:center; box-shadow:0 0 0 1px #06c inset; background:linear-gradient(to bottom,#4a9bff,#0a5ad8 60%,#0a4ec0); }
     .ctrl.close { background:linear-gradient(to bottom,#f88e6f,#e23a1b 55%,#c52608); }
     .ctrl:active { filter:brightness(.9); }
+    .ctrl.disabled { opacity:.45; color:#cfe0ff; box-shadow:0 0 0 1px #5b86c4 inset; pointer-events:none; }
+    .ctrl.disabled:active { filter:none; }
 
     .menubar { display:flex; gap:2px; padding:3px 4px; font-size:11px; }
     .menubar span { padding:2px 7px; border-radius:3px; cursor:default; }
@@ -76,6 +78,8 @@
     .pill { padding:1px 8px; border-radius:2px; font-weight:bold; font-size:10px; border:1px solid; }
     .pill.pred { background:#e8f0ff; color:#0a3ea0; border-color:#9bbcf0; }
     .pill.panel { background:#fff3d6; color:#9a6a00; border-color:#e3c277; }
+    .pill.inft { background:linear-gradient(to bottom,#fff7df,#ffe9ad); color:#8a5a00; border-color:#d9a93a; text-decoration:none; cursor:pointer; }
+    .pill.inft:hover { filter:brightness(1.04); text-decoration:underline; }
     .status-pending { background:#efece0; color:#6b6655; border:1px solid #c9c4b2; }
     .status-correct { background:#e3f4df; color:#1a7a1a; border:1px solid #9fd398; }
     .status-wrong   { background:#fde6e1; color:#c0341d; border:1px solid #f0aa9a; }

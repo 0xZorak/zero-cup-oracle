@@ -6,11 +6,16 @@ install, nothing trusts our server).
 
 > Mirror: https://0xzorak.github.io/zero-cup-oracle/ · Built for the **0G Zero Cup**.
 
+> **Status (honest):** live on 0G Galileo **testnet** — contracts deployed, predictions
+> committed and independently verifiable on-chain *today*. The track record is early and
+> grows every time the agent runs; it runs on demand now, with continuous hosting documented
+> in [RUNNING.md](RUNNING.md). X auto-posting is built but **off** unless credentials are set.
+
 ---
 
 ## What it does
 
-The Oracle is an **autonomous agent that predicts every World Cup match before kickoff** —
+The Oracle is an **autonomous agent that predicts World Cup matches before kickoff** —
 and makes each prediction impossible to fake or backdate.
 
 For each upcoming match it:

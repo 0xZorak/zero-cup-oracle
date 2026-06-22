@@ -72,7 +72,9 @@ test("agent and frontend recordHash match", () => {
 });
 
 test("key order does not affect the hash", () => {
-  const reordered = { match: record.match, prediction: record.prediction, ...record };
+  // Same data, different insertion order (match/prediction pulled to the front).
+  const { match, prediction, ...rest } = record;
+  const reordered = { match, prediction, ...rest };
   assert.equal(recordHash(record), recordHash(reordered));
 });
 

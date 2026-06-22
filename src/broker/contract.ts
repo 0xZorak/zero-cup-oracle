@@ -98,6 +98,11 @@ export async function accuracyBps(runner: Wallet | JsonRpcProvider): Promise<num
   return Number(await oracleContract(runner).accuracyBps());
 }
 
+/** How many predictions have been committed (the registry array length). */
+export async function totalPredictions(runner: Wallet | JsonRpcProvider): Promise<number> {
+  return Number(await oracleContract(runner).totalPredictions());
+}
+
 export interface OnChainPrediction {
   id: number;
   matchId: bigint;

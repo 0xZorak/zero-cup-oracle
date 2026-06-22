@@ -1,6 +1,6 @@
 # The Oracle — Verifiable World Cup Predictions on 0G
 
-**▶ Live demo: https://the-oracle-zoraks-projects.vercel.app** — open it, click **Verify**
+**▶ Live demo: https://the-oracle-0g.vercel.app** — open it, click **Verify**
 on any prediction, and watch the integrity check run *in your own browser* (no wallet, no
 install, nothing trusts our server).
 
@@ -121,7 +121,7 @@ and shown in the Verify card. ([src/agent/panel.ts](src/agent/panel.ts))
 
 ### As a visitor — just open the site
 
-No install, no wallet, no keys. Open the [live demo](https://the-oracle-zoraks-projects.vercel.app),
+No install, no wallet, no keys. Open the [live demo](https://the-oracle-0g.vercel.app),
 browse the **Upcoming / Verified** tabs, and click **Verify** on any prediction. Your browser
 fetches the record from 0G Storage, recomputes the hash, and checks it against the chain —
 live, in front of you. Try **Beat the Oracle** (pick the matches yourself, then see its

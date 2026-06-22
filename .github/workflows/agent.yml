@@ -1,0 +1,51 @@
+# Free "serverless cron" host for the Oracle agent — no always-on box needed.
+# Each run does ONE predict+resolve tick (`npm run agent -- --once`) and exits.
+# Public-repo Actions minutes are free. Idempotent: predictions are guarded by the
+# contract's `committedMatch` check and resolution is chain-driven, so a fresh
+# (cursor-less) runner never double-commits or double-resolves.
+#
+# Setup: repo Settings → Secrets and variables → Actions → add secrets:
+#   PRIVATE_KEY        (the agent wallet — required)
+#   FOOTBALL_API_KEY   (football-data.org free key — for live fixtures/results)
+#   X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET  (optional — live tweets)
+name: Oracle agent
+
+on:
+  schedule:
+    - cron: "*/15 * * * *" # every ~15 min (GitHub may delay during peak load)
+  workflow_dispatch: {} # lets you run a tick manually from the Actions tab
+
+# Never let two ticks overlap.
+concurrency:
+  group: oracle-agent
+  cancel-in-progress: false
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Public config (safe to commit).
+      OG_RPC_URL: https://evmrpc-testnet.0g.ai
+      OG_CHAIN_ID: "16602"
+      OG_STORAGE_INDEXER_URL: https://indexer-storage-testnet-turbo.0g.ai
+      ORACLE_CONTRACT_ADDRESS: "0xBdA8083aCCf45Fe5b838936C94D53a91042D9Bbb"
+      INFT_CONTRACT_ADDRESS: "0x92DCcfA420397bAF3e60A3a673c6c1cC9677e9cC"
+      COMPUTE_PROVIDER_ADDRESS: "0xa48f01287233509FD694a22Bf840225062E67836"
+      FRONTEND_URL: https://the-oracle-0g.vercel.app
+      # Secrets (set in repo settings — masked in logs).
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      FOOTBALL_API_KEY: ${{ secrets.FOOTBALL_API_KEY }}
+      X_API_KEY: ${{ secrets.X_API_KEY }}
+      X_API_SECRET: ${{ secrets.X_API_SECRET }}
+      X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+      X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Predict + resolve one tick
+        run: npm run agent -- --once

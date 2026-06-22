@@ -7,9 +7,8 @@ install, nothing trusts our server).
 > Mirror: https://0xzorak.github.io/zero-cup-oracle/ · Built for the **0G Zero Cup**.
 
 > **Status (honest):** live on 0G Galileo **testnet** — contracts deployed, predictions
-> committed and independently verifiable on-chain *today*. The track record is early and
-> grows every time the agent runs; it runs on demand now, with continuous hosting documented
-> in [RUNNING.md](RUNNING.md). X auto-posting is built but **off** unless credentials are set.
+> committed and independently verifiable on-chain *today*. The track record is early and grows
+> every time the agent runs; continuous hosting is documented in [RUNNING.md](RUNNING.md).
 
 ---
 
@@ -30,6 +29,29 @@ For each upcoming match it:
 The website lets anyone re-derive the whole proof client-side. There's also a **"Beat the
 Oracle"** game, an **"Ask the Oracle"** chat, and an **MCP server** so other AI agents can
 read and verify the Oracle's record directly.
+
+---
+
+## Use cases
+
+The World Cup is the showcase, but the primitive — *un-fakeable proof that an AI made a
+specific claim before an outcome was known* — generalizes. What you can actually do with it:
+
+- **Trust an AI's prediction record (fans & bettors).** Browse every call on-chain, see the
+  honest accuracy, and **Verify** any prediction yourself in the browser — no wallet, no
+  account. The trust layer sports tipping never had.
+- **Play against it (engagement).** *Beat the Oracle* lets visitors pick the matches
+  themselves, then reveals the Oracle's on-chain call and scores them against its record.
+- **Ask it anything (support).** *Ask the Oracle* answers questions about any call, the running
+  accuracy, and how to verify — entirely client-side, grounded in the on-chain data.
+- **Let other agents trust it (agent-to-agent).** Through the **MCP server**, any AI agent can
+  pull the record *and independently verify it* — a building block for an agent economy where
+  one agent must trust another's claims without a middleman.
+- **Prove which AI produced what, when (provenance).** Each call is a soulbound **iNFT** bound
+  to the agent's **0G Agentic ID** — on-chain, non-transferable proof of authorship and timing.
+- **Reuse the pattern (verifiable AI accountability).** Swap "World Cup match" for any
+  pre-event AI claim — prediction markets, price/weather forecasts, model accountability,
+  content provenance. Anywhere you need *cryptographic proof an AI said X before Y happened.*
 
 ---
 
@@ -158,13 +180,12 @@ cd frontend && python3 -m http.server 8099   # then open http://localhost:8099
 
 **Live fixtures:** set `FOOTBALL_API_KEY` (free at football-data.org) to predict real
 matches. With no key, the agent uses `data/fixtures.json` / `data/results.json` — enough to
-demo the whole loop offline. **Social:** set the four `X_*` OAuth 1.0a creds to auto-post the
-pre-kickoff call and post-match receipt to X; leave them blank and the agent dry-runs (prints
-the tweet, never breaks the loop).
+demo the whole loop offline.
 
-> **Running it 24/7?** See [**RUNNING.md**](RUNNING.md) — the free data key, a one-command
-> launch (`npm run agent`), and always-on hosting via pm2 / the included `Dockerfile` /
-> `Procfile` (Railway · Render · Fly).
+> **Running it continuously?** See [**RUNNING.md**](RUNNING.md) — the free data key, a
+> one-command launch (`npm run agent`), and always-on hosting options including a **free
+> GitHub Actions cron** ([.github/workflows/agent.yml](.github/workflows/agent.yml)), pm2, or
+> the included `Dockerfile`.
 
 To ship the site: deploy the static `frontend/` folder to Vercel / Netlify / Cloudflare Pages
 and point `frontend/config.js` at your deployed contract addresses. That URL is all a visitor
@@ -277,3 +298,5 @@ ships an SDK that targets the current contract.
   scoreboard earns that, over time. We don't blur the two.
 - **Keys stay server-side.** The agent's private key funds compute and signs commits — env
   vars only, never the frontend.
+- **Social auto-posting is disabled.** The X integration (`src/social/x.ts`) is built but off —
+  X's API now requires a paid tier to post — so the agent dry-runs it (prints, never posts).

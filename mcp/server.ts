@@ -151,6 +151,9 @@ server.tool(
   "Get one prediction by id, including its FULL record fetched from 0G Storage: the matched teams, the judge's call + scoreline + confidence + rationale, and the multi-agent TEE panel debate.",
   { id: z.number().int().nonnegative().describe("On-chain prediction id (0-based)") },
   async ({ id }) => {
+    const total = Number(await oracle.totalPredictions());
+    if (id >= total)
+      return json({ id, error: `No prediction #${id} — only ${total} exist (ids 0..${total - 1}).` });
     const onChain = await readPrediction(id);
     let record: PredictionRecord | { error: string };
     try {
@@ -167,6 +170,9 @@ server.tool(
   "Independently verify a prediction with zero trust in our server — the same check the browser runs. Re-fetches the record from 0G Storage, recomputes keccak256(canonicalJSON(record)), and asserts it equals the on-chain hash; also asserts the commit landed BEFORE kickoff and that every agent's inference carried a valid TEE signature. Returns a structured pass/fail proof.",
   { id: z.number().int().nonnegative().describe("On-chain prediction id to verify") },
   async ({ id }) => {
+    const total = Number(await oracle.totalPredictions());
+    if (id >= total)
+      return json({ id, verified: false, error: `No prediction #${id} — only ${total} exist (ids 0..${total - 1}).` });
     const onChain = await readPrediction(id);
     let record: PredictionRecord;
     try {
